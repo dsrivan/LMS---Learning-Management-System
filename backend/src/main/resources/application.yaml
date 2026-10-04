@@ -1,3 +1,27 @@
 spring:
   application:
     name: learning-platform
+    description: API for the Learning Management System
+    version: 0.0.1-alpha01
+
+  datasource:
+    url: JDBC:postgresql://localhost:5432/learning_platform
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    br.com.dsrivan.learningplatform: DEBUG
