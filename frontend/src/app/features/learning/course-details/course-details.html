@@ -1,0 +1,60 @@
+<a class="mb-4 inline-block text-sm" routerLink="/dashboard">‹ Meu aprendizado</a>
+<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1>{{ course.title }}</h1>
+    <p class="mt-1 text-muted">{{ course.description }}</p>
+  </div>
+  <div class="flex flex-wrap gap-2.5"></div>
+</div>
+<div
+  class="my-5 grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-px overflow-hidden rounded-xl border border-line bg-line [&>div]:bg-surface [&>div]:px-[18px] [&>div]:py-4 [&_span]:block [&_span]:text-xs [&_span]:text-muted"
+>
+  <div>
+    <span>Data da matrícula</span><strong>{{ course.enrollmentDate }}</strong>
+  </div>
+  <div>
+    <span>Prazo para conclusão</span><strong>{{ course.conclusionDate }}</strong>
+  </div>
+</div>
+<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div><h1>Minhas tarefas</h1></div>
+  <div class="flex flex-wrap gap-2.5">
+    <a class="btn" routerLink="/cursos/1/tarefas/nova">Registrar tarefa</a>
+  </div>
+</div>
+<div class="overflow-x-auto rounded-xl border border-line bg-surface">
+  <table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Categoria</th>
+        <th>Descrição</th>
+        <th>Tempo gasto</th>
+        <th class="text-right">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (task of taskList; track task.id) {
+        <tr>
+          <td>{{ task.date }}</td>
+          <td>
+            <span
+              class="inline-block w-fit rounded-full px-2.5 py-0.5 text-[.72rem] font-semibold bg-accent-soft text-accent"
+              >{{ task.category }}</span
+            >
+          </td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.timeSpent }}</td>
+          <td class="whitespace-nowrap text-right">
+            <a class="btn btn-ghost btn-sm" routerLink="/cursos/1/tarefas/1/editar">Editar</a>
+            <button type="button" class="btn btn-ghost btn-sm btn-danger">Remover</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="5" class="text-center text-muted">Nenhuma tarefa registrada.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
