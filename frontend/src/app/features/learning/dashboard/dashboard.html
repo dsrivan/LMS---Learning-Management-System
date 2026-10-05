@@ -1,0 +1,62 @@
+<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1>Meu aprendizado</h1>
+    <p class="mt-1 text-muted">Acompanhe os seus cursos</p>
+  </div>
+  <div class="flex flex-wrap gap-2.5">
+    <a class="btn" routerLink="/cursos">Ver cursos disponíveis</a>
+  </div>
+</div>
+<h2>Cursos em andamento</h2>
+<div class="mt-3.5 grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-4">
+  @for (course of courseList; track course.id) {
+    <article
+      class="flex flex-col gap-3 rounded-xl border border-line bg-surface p-5 [&_h2_a]:text-ink [&>p]:flex-1 [&>p]:text-sm [&>p]:text-muted"
+    >
+      <h2>
+        <a routerLink="/cursos/1">{{ course.title }}</a>
+      </h2>
+      <div>
+        <div
+          class="h-1.5 overflow-hidden rounded-full bg-line"
+          role="progressbar"
+          aria-valuenow="22"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <b
+            class="block h-full rounded-full bg-accent"
+            style="width: 90%"
+            title="tempo restante: 90%"
+          ></b>
+        </div>
+        <small class="mt-1.5 block text-xs text-muted">{{ course.description }}</small>
+      </div>
+      <div class="flex flex-wrap justify-between gap-2 text-xs text-muted mt-1.5">
+        <span>Matrícula: {{ course.enrollmentDate }}</span
+        ><span>Prazo: {{ course.conclusionDate }}</span>
+      </div>
+    </article>
+  } @empty {
+    <tr>
+      <td colspan="3" class="text-center text-muted">Nenhum curso encontrado.</td>
+    </tr>
+  }
+</div>
+<div class="mt-9">
+  <h2 class="mb-3.5">Cursos concluídos</h2>
+  <div class="rounded-xl border border-line bg-surface">
+    @for (course of courseList; track course.id) {
+      <div
+        class="flex items-center justify-between gap-3 border-b border-line px-5 py-3.5 last:border-0 [&_small]:text-muted"
+      >
+        <strong>{{ course.title }}</strong
+        ><small>Concluído em {{ course.conclusionDate }}</small>
+      </div>
+    } @empty {
+      <div class="mt-1.5">
+        <p class="mt-1 text-muted">Nenhum curso encontrado.</p>
+      </div>
+    }
+  </div>
+</div>
