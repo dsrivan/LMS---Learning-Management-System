@@ -1,3 +1,105 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Tokens: o tema escuro troca só os valores; as classes (bg-surface, text-muted...) não mudam. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #fff;
+  --ink: #161a22;
+  --muted: #667085;
+  --line: #e4e7ec;
+  --accent: #2f5bea;
+  --accent-ink: #fff;
+  --accent-soft: #eaf0ff;
+  --ok: #12805c;
+  --ok-soft: #e3f6ee;
+  --danger: #c4321f;
+  color-scheme: light;
+}
+.dark {
+  --bg: #0f1218;
+  --surface: #171b24;
+  --ink: #eef0f4;
+  --muted: #98a2b3;
+  --line: #262c38;
+  --accent: #6b8cff;
+  --accent-ink: #0f1218;
+  --accent-soft: #1c2540;
+  --ok: #4cc79a;
+  --ok-soft: #14302a;
+  --danger: #ff7a66;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-danger: var(--danger);
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-ink antialiased;
+  }
+  h1 {
+    @apply text-[1.625rem] font-semibold leading-tight tracking-tight;
+  }
+  h2 {
+    @apply text-[1.0625rem] font-semibold tracking-tight;
+  }
+  a {
+    @apply text-accent no-underline;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+  input,
+  select,
+  textarea {
+    @apply w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-ink focus:border-accent focus:outline-2 focus:-outline-offset-1 focus:outline-accent;
+  }
+  textarea {
+    @apply min-h-28 resize-y;
+  }
+  table {
+    @apply w-full min-w-[620px] border-collapse text-[.88rem];
+  }
+  th {
+    @apply border-b border-line px-4 py-3 text-left text-xs font-medium text-muted;
+  }
+  td {
+    @apply border-b border-line px-4 py-3.5 align-top;
+  }
+  tr:last-child td {
+    @apply border-0;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-line bg-surface p-6 sm:p-7;
+  }
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent bg-accent px-4 py-2.5 text-sm font-semibold text-accent-ink transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply border-line bg-transparent text-ink hover:bg-bg hover:brightness-100;
+  }
+  .btn-sm {
+    @apply px-2.5 py-1.5 text-xs;
+  }
+  .btn-link {
+    @apply border-transparent bg-transparent px-0 text-accent hover:bg-transparent;
+  }
+  .btn-danger {
+    @apply text-danger;
+  }
+}
