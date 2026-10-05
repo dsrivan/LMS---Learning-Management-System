@@ -1,0 +1,40 @@
+<div class="mx-auto max-w-[560px]">
+  <a class="mb-4 inline-block text-sm" routerLink="/cursos/1">‹ Voltar ao curso</a>
+  <div class="card">
+    <h1>Registrar tarefa</h1>
+    <p class="mt-1 text-muted">Você pode registrar várias tarefas no mesmo dia.</p>
+    <form class="mt-5 grid gap-4" (submit)="$event.preventDefault()">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="grid gap-1.5 text-sm font-medium"
+          ><span>Data</span><input type="date" value="2026-10-02" /></label
+        ><label class="grid gap-1.5 text-sm font-medium"
+          ><span>Categoria</span
+          ><select>
+            <option value="" disabled selected>Selecione</option>
+            @for (category of categoryList; track category) {
+              <option>{{ category }}</option>
+            }
+          </select></label
+        >
+      </div>
+      <label class="grid gap-1.5 text-sm font-medium"
+        ><span>Descrição da tarefa</span><textarea placeholder="O que você fez?"></textarea>
+      </label>
+      <label class="grid gap-1.5 text-sm font-medium"
+        ><span>Tempo gasto</span
+        ><select>
+          <option value="" disabled selected>Selecione</option>
+          @for (time of spentTimeList; track time) {
+            <option>{{ time }}</option>
+          }</select
+        ><span class="text-xs font-normal text-muted"
+          >Registrado em blocos de 30 minutos.</span
+        ></label
+      >
+      <div class="flex justify-end gap-2.5">
+        <a class="btn btn-ghost" routerLink="/cursos/1">Cancelar</a
+        ><a class="btn" routerLink="/cursos/1">Salvar</a>
+      </div>
+    </form>
+  </div>
+</div>
