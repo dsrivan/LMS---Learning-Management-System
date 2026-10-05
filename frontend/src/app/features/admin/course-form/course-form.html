@@ -1,0 +1,21 @@
+<div class="mx-auto max-w-[560px]">
+  <a class="mb-4 inline-block text-sm" routerLink="/admin/cursos">‹ Gerenciar cursos</a>
+  <div class="card">
+    <h1>Novo curso</h1>
+    <form class="mt-5 grid gap-4" (submit)="$event.preventDefault()">
+      <label class="grid gap-1.5 text-sm font-medium"
+        ><span>Nome do curso</span><input placeholder="Ex.: Kubernetes Essencial" /><span
+          class="text-xs font-normal text-muted"
+          >O nome deve ser único.</span
+        ></label
+      >
+      <label class="grid gap-1.5 text-sm font-medium"
+        ><span>Descrição</span><textarea placeholder="O que o estudante vai aprender?"></textarea>
+      </label>
+      <div class="flex justify-end gap-2.5">
+        <a class="btn btn-ghost" routerLink="/admin/cursos">Cancelar</a
+        ><a class="btn" routerLink="/admin/cursos">Salvar</a>
+      </div>
+    </form>
+  </div>
+</div>
