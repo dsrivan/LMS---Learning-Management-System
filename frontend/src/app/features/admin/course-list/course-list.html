@@ -1,0 +1,43 @@
+<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1>Gerenciar cursos</h1>
+    <p class="mt-1 text-muted">Cursos ficam abertos para matrícula por tempo indeterminado.</p>
+  </div>
+  <div class="flex flex-wrap gap-2.5">
+    <a class="btn" routerLink="/admin/cursos/novo">Novo curso</a>
+  </div>
+</div>
+<label class="grid gap-1.5 text-sm font-medium mb-5 max-w-[360px]"
+  ><span>Buscar curso</span><input type="search" placeholder="Ex.: Kubernetes"
+/></label>
+<div class="overflow-x-auto rounded-xl border border-line bg-surface">
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th class="text-right">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (course of courseList; track course.id) {
+        <tr>
+          <td>
+            <strong>{{ course.title }}</strong>
+          </td>
+          <td>{{ course.description }}</td>
+          <td class="whitespace-nowrap text-right">
+            <a class="btn btn-ghost btn-sm" [routerLink]="['/admin/cursos', course.id, 'editar']"
+              >Editar</a
+            >
+            <button type="button" class="btn btn-ghost btn-sm btn-danger">Remover</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="3" class="text-center text-muted">Nenhum curso encontrado.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
