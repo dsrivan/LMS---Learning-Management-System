@@ -1,0 +1,36 @@
+<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1>Cursos disponíveis</h1>
+    <p class="mt-1 text-muted">Você pode ter até 3 cursos em andamento ao mesmo tempo.</p>
+  </div>
+  <div class="flex flex-wrap gap-2.5"></div>
+</div>
+<label class="grid gap-1.5 text-sm font-medium mb-5 max-w-[360px]"
+  ><span>Buscar curso</span><input type="search" placeholder="Ex.: Docker"
+/></label>
+<div class="grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-4">
+  @for (course of courseList; track course.id) {
+    <article
+      class="flex flex-col gap-3 rounded-xl border border-line bg-surface p-5 [&_h2_a]:text-ink [&>p]:flex-1 [&>p]:text-sm [&>p]:text-muted"
+    >
+      <span
+        class="inline-block w-fit rounded-full px-2.5 py-0.5 text-[.72rem] font-semibold bg-ok-soft text-ok"
+        >Disponível</span
+      >
+      <!-- <span
+      class="inline-block w-fit rounded-full px-2.5 py-0.5 text-[.72rem] font-semibold bg-accent-soft text-accent"
+      >Matriculado</span
+    > -->
+      <h2>{{ course.title }}</h2>
+      <p>{{ course.description }}</p>
+      <div class="flex flex-wrap gap-2.5">
+        <a class="btn btn-ghost btn-sm" routerLink="/cursos/{{ course.id }}">Ver detalhes</a
+        ><button type="button" class="btn btn-sm">Matricular-se</button>
+      </div>
+    </article>
+  } @empty {
+    <div class="mt-1.5">
+      <p class="mt-1 text-muted">Nenhum curso encontrado.</p>
+    </div>
+  }
+</div>
