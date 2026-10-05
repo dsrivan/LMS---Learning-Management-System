@@ -1,0 +1,41 @@
+<div class="grid min-h-screen place-items-center p-6">
+  <div class="w-full max-w-[480px]">
+    <div class="mb-7 flex items-center justify-center gap-2 font-bold tracking-tight">
+      <i class="size-[22px] rounded-md bg-accent"></i>Trilha
+    </div>
+    <div class="card">
+      <h1>Criar conta</h1>
+      <p class="mt-1 text-muted">Leva menos de um minuto.</p>
+      <form class="mt-5 grid gap-4" (submit)="$event.preventDefault()">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="grid gap-1.5 text-sm font-medium"
+            ><span>Primeiro nome</span><input autocomplete="given-name" /></label
+          ><label class="grid gap-1.5 text-sm font-medium"
+            ><span>Último nome</span><input autocomplete="family-name"
+          /></label>
+        </div>
+        <label class="grid gap-1.5 text-sm font-medium"
+          ><span>Data de nascimento</span><input type="date" /><span
+            class="text-xs font-normal text-muted"
+            >Idade mínima: 16 anos.</span
+          ></label
+        >
+        <label class="grid gap-1.5 text-sm font-medium"
+          ><span>E-mail</span><input type="email" autocomplete="email"
+        /></label>
+        <label class="grid gap-1.5 text-sm font-medium"
+          ><span>Telefone</span><input type="tel" autocomplete="tel" placeholder="(11) 99999-9999"
+        /></label>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <label class="grid gap-1.5 text-sm font-medium"
+            ><span>Senha</span><input type="password" autocomplete="new-password" /></label
+          ><label class="grid gap-1.5 text-sm font-medium"
+            ><span>Confirmar senha</span><input type="password" autocomplete="new-password"
+          /></label>
+        </div>
+        <a class="btn w-full" routerLink="/login">Cadastrar</a>
+      </form>
+    </div>
+    <p class="mt-5 text-center text-sm text-muted"><a routerLink="/login">Voltar para login</a></p>
+  </div>
+</div>
