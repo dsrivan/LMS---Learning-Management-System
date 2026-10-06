@@ -1,4 +1,4 @@
-package br.com.dsrivan.learningplatform.auth;
+package br.com.dsrivan.learningplatform.user;
 
 public enum UserRole {
     ADMIN,

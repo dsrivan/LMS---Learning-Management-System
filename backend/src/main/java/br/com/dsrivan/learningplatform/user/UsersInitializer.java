@@ -1,7 +1,5 @@
-package br.com.dsrivan.learningplatform.auth;
+package br.com.dsrivan.learningplatform.user;
 
-import br.com.dsrivan.learningplatform.user.User;
-import br.com.dsrivan.learningplatform.user.UserRole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -23,30 +21,45 @@ public class UsersInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        if (userRepository
-                .findByEmailIgnoreCase("admin@learning.com")
-                .isEmpty()) {
+        createAdmin();
+        createStudent();
+    }
 
-            userRepository.save(
-                    new User(
-                            "admin@learning.com",
-                            passwordEncoder.encode("admin123"),
-                            UserRole.ADMIN
-                    )
-            );
+    private void createAdmin() {
+
+        if (userRepository.existsByEmailIgnoreCase("admin@learning.com")) {
+            return;
         }
 
-        if (userRepository
-                .findByEmailIgnoreCase("user@learning.com")
-                .isEmpty()) {
+        User admin = new User();
 
-            userRepository.save(
-                    new User(
-                            "user@learning.com",
-                            passwordEncoder.encode("user123"),
-                            UserRole.STUDENT
-                    )
-            );
+        admin.setFirstName("Admin");
+        admin.setLastName("Learning");
+        admin.setBirthDate(java.time.LocalDate.of(1990, 1, 1));
+        admin.setEmail("admin@learning.com");
+        admin.setPhone("000000000");
+        admin.setPassword(passwordEncoder.encode("admin123"));
+        admin.setRole(UserRole.ADMIN);
+
+        userRepository.save(admin);
+    }
+
+    private void createStudent() {
+
+        if (userRepository.existsByEmailIgnoreCase("estudante@learning.com")) {
+            return;
         }
+
+        User user = new User();
+
+        user.setFirstName("Estudante");
+        user.setLastName("Learning");
+        user.setBirthDate(java.time.LocalDate.of(2000, 1, 1));
+        user.setEmail("estudante@learning.com");
+        user.setPhone("000000000");
+        user.setPassword(passwordEncoder.encode("estudante123"));
+        user.setRole(UserRole.STUDENT);
+
+        userRepository.save(user);
     }
 }
