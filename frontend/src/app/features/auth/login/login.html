@@ -1,23 +1,67 @@
 <div class="grid min-h-screen place-items-center p-6">
-  <div class="w-full max-w-[480px]">
+  <div class="w-full max-w-120">
     <div class="mb-7 flex items-center justify-center gap-2 font-bold tracking-tight">
-      <i class="size-[22px] rounded-md bg-accent"></i>Trilha
+      <i class="size-5.5 rounded-md bg-accent"></i>
+      Trilha
     </div>
+
     <div class="card">
       <h1>Entrar</h1>
       <p class="mt-1 text-muted">Acesse sua conta para continuar aprendendo.</p>
-      <form class="mt-5 grid gap-4" (submit)="$event.preventDefault()">
-        <label class="grid gap-1.5 text-sm font-medium"
-          ><span>E-mail</span><input type="email" autocomplete="email" placeholder="voce@email.com"
-        /></label>
-        <label class="grid gap-1.5 text-sm font-medium"
-          ><span>Senha</span><input type="password" autocomplete="current-password"
-        /></label>
-        <a class="btn w-full" routerLink="/dashboard">Entrar</a>
+
+      <form #form="ngForm" class="mt-5 grid gap-4" (ngSubmit)="onSubmit(form)">
+        <label class="grid gap-1.5 text-sm font-medium">
+          <span>E-mail</span>
+
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="formData.email"
+            autocomplete="email"
+            placeholder="voce@email.com"
+            required
+          />
+
+          @if (form.controls['email']?.invalid && form.controls['email']?.touched) {
+            @if (form.controls['email']?.errors?.['required']) {
+              <span class="text-xs font-normal text-danger"> Informe o e-mail. </span>
+            }
+
+            @if (form.controls['email']?.errors?.['email']) {
+              <span class="text-xs font-normal text-danger"> Informe um e-mail válido. </span>
+            }
+          }
+        </label>
+
+        <label class="grid gap-1.5 text-sm font-medium">
+          <span>Senha</span>
+
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="formData.password"
+            autocomplete="current-password"
+            required
+          />
+
+          @if (form.controls['password']?.invalid && form.controls['password']?.touched) {
+            <span class="text-xs font-normal text-danger"> Informe a senha. </span>
+          }
+        </label>
+        @if (hasError()) {
+          <span class="text-xs font-normal text-danger"> E-mail ou senha inválidos. </span>
+        }
+
+        <button type="submit" class="btn w-full" [disabled]="loading()">
+          {{ loading() ? 'Entrando...' : 'Entrar' }}
+        </button>
       </form>
     </div>
+
     <p class="mt-5 text-center text-sm text-muted">
-      Ainda não tem conta? <a routerLink="/cadastro">Criar conta</a>
+      Ainda não tem conta?
+      <a routerLink="/cadastro">Criar conta</a>
     </p>
   </div>
 </div>
+```

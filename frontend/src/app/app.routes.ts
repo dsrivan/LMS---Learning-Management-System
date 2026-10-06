@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/auth/auth.guard';
+import { roleGuard } from './core/auth/role.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -15,46 +17,68 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     title: 'Meu aprendizado',
+    canActivate: [authGuard],
     loadComponent: () => import('./features/learning/dashboard/dashboard').then((m) => m.Dashboard),
   },
   {
     path: 'cursos',
-    title: 'Cursos disponíveis',
-    loadComponent: () => import('./features/learning/catalog/catalog').then((m) => m.Catalog),
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        title: 'Cursos disponíveis',
+        loadComponent: () => import('./features/learning/catalog/catalog').then((m) => m.Catalog),
+      },
+      {
+        path: 'meu-curso/:id',
+        title: 'Detalhes do curso',
+        loadComponent: () =>
+          import('./features/learning/enrollment-details/enrollment-details').then(
+            (m) => m.CourseDetails,
+          ),
+      },
+      {
+        path: 'meu-curso/:idEnrollment/tarefas/nova',
+        title: 'Registrar tarefa',
+        loadComponent: () =>
+          import('./features/learning/task-create/task-create').then((m) => m.TaskCreate),
+      },
+      {
+        path: 'meu-curso/:idEnrollment/tarefas/:idTask/editar',
+        title: 'Editar tarefa',
+        loadComponent: () =>
+          import('./features/learning/task-edit/task-edit').then((m) => m.TaskEdit),
+      },
+    ],
   },
   {
-    path: 'cursos/:courseId',
-    title: 'Detalhes do curso',
-    loadComponent: () =>
-      import('./features/learning/course-details/course-details').then((m) => m.CourseDetails),
-  },
-  {
-    path: 'cursos/:courseId/tarefas/nova',
-    title: 'Registrar tarefa',
-    loadComponent: () => import('./features/learning/task-form/task-form').then((m) => m.TaskForm),
-  },
-  {
-    path: 'cursos/:courseId/tarefas/:taskId/editar',
-    title: 'Registrar tarefa',
-    loadComponent: () => import('./features/learning/task-form/task-form').then((m) => m.TaskForm),
-  },
-  {
-    path: 'admin/cursos',
-    title: 'Gerenciar cursos',
-    loadComponent: () =>
-      import('./features/admin/course-list/course-list').then((m) => m.CourseList),
-  },
-  {
-    path: 'admin/cursos/novo',
-    title: 'Novo curso',
-    loadComponent: () =>
-      import('./features/admin/course-form/course-form').then((m) => m.CourseForm),
-  },
-  {
-    path: 'admin/cursos/:id/editar',
-    title: 'Novo curso',
-    loadComponent: () =>
-      import('./features/admin/course-form/course-form').then((m) => m.CourseForm),
+    path: 'admin',
+    title: 'Administração de cursos',
+    canActivate: [authGuard, roleGuard],
+    data: {
+      role: 'ADMIN',
+    },
+    children: [
+      {
+        path: 'cursos',
+        title: 'Gerenciar cursos',
+        loadComponent: () =>
+          import('./features/admin/course-list/course-list').then((m) => m.CourseList),
+      },
+      {
+        path: 'cursos/novo',
+        title: 'Novo curso',
+        loadComponent: () =>
+          import('./features/admin/course-create/course-create').then((m) => m.CourseCreate),
+      },
+      {
+        path: 'cursos/:id/editar',
+        title: 'Editar curso',
+        loadComponent: () =>
+          import('./features/admin/course-edit/course-edit').then((m) => m.CourseEdit),
+      },
+      { path: '**', redirectTo: 'admin' },
+    ],
   },
   { path: '**', redirectTo: 'login' },
 ];

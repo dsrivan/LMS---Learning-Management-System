@@ -1,41 +1,157 @@
 <div class="grid min-h-screen place-items-center p-6">
-  <div class="w-full max-w-[480px]">
+  <div class="w-full max-w-120">
     <div class="mb-7 flex items-center justify-center gap-2 font-bold tracking-tight">
-      <i class="size-[22px] rounded-md bg-accent"></i>Trilha
+      <i class="size-5.5 rounded-md bg-accent"></i>
+      Trilha
     </div>
+
     <div class="card">
       <h1>Criar conta</h1>
       <p class="mt-1 text-muted">Leva menos de um minuto.</p>
-      <form class="mt-5 grid gap-4" (submit)="$event.preventDefault()">
+
+      <form #form="ngForm" class="mt-5 grid gap-4" (ngSubmit)="onSubmit(form)">
         <div class="grid gap-4 sm:grid-cols-2">
-          <label class="grid gap-1.5 text-sm font-medium"
-            ><span>Primeiro nome</span><input autocomplete="given-name" /></label
-          ><label class="grid gap-1.5 text-sm font-medium"
-            ><span>Último nome</span><input autocomplete="family-name"
-          /></label>
+          <label class="grid gap-1.5 text-sm font-medium">
+            <span>Primeiro nome</span>
+
+            <input
+              name="firstName"
+              [(ngModel)]="formData.firstName"
+              autocomplete="given-name"
+              required
+            />
+
+            @if (form.controls['firstName']?.invalid && form.controls['firstName']?.touched) {
+              <span class="text-xs font-normal text-danger"> Informe o primeiro nome. </span>
+            }
+          </label>
+
+          <label class="grid gap-1.5 text-sm font-medium">
+            <span>Último nome</span>
+
+            <input
+              name="lastName"
+              [(ngModel)]="formData.lastName"
+              autocomplete="family-name"
+              required
+            />
+
+            @if (form.controls['lastName']?.invalid && form.controls['lastName']?.touched) {
+              <span class="text-xs font-normal text-danger"> Informe o último nome. </span>
+            }
+          </label>
         </div>
-        <label class="grid gap-1.5 text-sm font-medium"
-          ><span>Data de nascimento</span><input type="date" /><span
-            class="text-xs font-normal text-muted"
-            >Idade mínima: 16 anos.</span
-          ></label
-        >
-        <label class="grid gap-1.5 text-sm font-medium"
-          ><span>E-mail</span><input type="email" autocomplete="email"
-        /></label>
-        <label class="grid gap-1.5 text-sm font-medium"
-          ><span>Telefone</span><input type="tel" autocomplete="tel" placeholder="(11) 99999-9999"
-        /></label>
+
+        <label class="grid gap-1.5 text-sm font-medium">
+          <span>Data de nascimento</span>
+
+          <input type="date" name="birthDate" [(ngModel)]="formData.birthDate" required />
+
+          <span class="text-xs font-normal text-muted"> Idade mínima: 16 anos. </span>
+
+          @if (form.controls['birthDate']?.invalid && form.controls['birthDate']?.touched) {
+            <span class="text-xs font-normal text-danger"> Informe a data de nascimento. </span>
+          }
+        </label>
+
+        <label class="grid gap-1.5 text-sm font-medium">
+          <span>E-mail</span>
+
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="formData.email"
+            autocomplete="email"
+            required
+          />
+
+          @if (form.controls['email']?.invalid && form.controls['email']?.touched) {
+            @if (form.controls['email']?.errors?.['required']) {
+              <span class="text-xs font-normal text-danger"> Informe o e-mail. </span>
+            }
+
+            @if (form.controls['email']?.errors?.['email']) {
+              <span class="text-xs font-normal text-danger"> Informe um e-mail válido. </span>
+            }
+          }
+        </label>
+
+        <label class="grid gap-1.5 text-sm font-medium">
+          <span>Telefone</span>
+
+          <input
+            type="tel"
+            name="phone"
+            [(ngModel)]="formData.phone"
+            autocomplete="tel"
+            placeholder="(11) 99999-9999"
+            required
+          />
+
+          @if (form.controls['phone']?.invalid && form.controls['phone']?.touched) {
+            <span class="text-xs font-normal text-danger"> Informe o telefone. </span>
+          }
+        </label>
+
         <div class="grid gap-4 sm:grid-cols-2">
-          <label class="grid gap-1.5 text-sm font-medium"
-            ><span>Senha</span><input type="password" autocomplete="new-password" /></label
-          ><label class="grid gap-1.5 text-sm font-medium"
-            ><span>Confirmar senha</span><input type="password" autocomplete="new-password"
-          /></label>
+          <label class="grid gap-1.5 text-sm font-medium">
+            <span>Senha</span>
+
+            <input
+              type="password"
+              name="password"
+              [(ngModel)]="formData.password"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            />
+
+            @if (form.controls['password']?.invalid && form.controls['password']?.touched) {
+              @if (form.controls['password']?.errors?.['required']) {
+                <span class="text-xs font-normal text-danger"> Informe a senha. </span>
+              }
+
+              @if (form.controls['password']?.errors?.['minlength']) {
+                <span class="text-xs font-normal text-danger">
+                  A senha deve ter pelo menos 6 caracteres.
+                </span>
+              }
+            }
+          </label>
+
+          <label class="grid gap-1.5 text-sm font-medium">
+            <span>Confirmar senha</span>
+
+            <input
+              type="password"
+              name="confirmPassword"
+              [(ngModel)]="formData.confirmPassword"
+              autocomplete="new-password"
+              required
+            />
+
+            @if (
+              form.controls['confirmPassword']?.invalid && form.controls['confirmPassword']?.touched
+            ) {
+              <span class="text-xs font-normal text-danger"> Confirme a senha. </span>
+            }
+
+            @if (
+              form.controls['confirmPassword']?.touched &&
+              formData.confirmPassword &&
+              formData.password !== formData.confirmPassword
+            ) {
+              <span class="text-xs font-normal text-danger"> As senhas não coincidem. </span>
+            }
+          </label>
         </div>
-        <a class="btn w-full" routerLink="/login">Cadastrar</a>
+
+        <button type="submit" class="btn w-full" [disabled]="form.invalid">Cadastrar</button>
       </form>
     </div>
-    <p class="mt-5 text-center text-sm text-muted"><a routerLink="/login">Voltar para login</a></p>
+
+    <p class="mt-5 text-center text-sm text-muted">
+      <a routerLink="/login">Voltar para login</a>
+    </p>
   </div>
 </div>
