@@ -1,5 +1,6 @@
 package br.com.dsrivan.learningplatform.auth;
 
+import br.com.dsrivan.learningplatform.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

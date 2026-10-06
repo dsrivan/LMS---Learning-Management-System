@@ -1,5 +1,7 @@
 package br.com.dsrivan.learningplatform.auth;
 
+import br.com.dsrivan.learningplatform.user.User;
+import br.com.dsrivan.learningplatform.user.UserRole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
