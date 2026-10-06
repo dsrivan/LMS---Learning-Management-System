@@ -15,7 +15,51 @@ Sistema de gerenciamento de aprendizagem em que estudantes se matriculam em curs
 
 - [Docker](https://docs.docker.com/get-docker/) com o Docker Compose instalado.
 
-Não é necessário instalar Java, Node.js nem PostgreSQL na sua máquina.
+Não é necessário instalar Java, Node.js nem PostgreSQL na sua máquina para executar o projeto com Docker Compose.
+
+## Configuração do ambiente
+
+O backend utiliza JWT para autenticação. Para assinar e validar os tokens, é necessário configurar a variável de ambiente `JWT_SECRET`.
+
+### Executando com Docker Compose
+
+Na raiz do projeto, duplique o arquivo `.env-example` e renomeie a cópia para `.env`:
+
+```text
+.env-example → .env
+```
+
+Em seguida, gere um segredo aleatório para desenvolvimento:
+
+```bash
+openssl rand -base64 32
+```
+
+Copie o valor gerado para a variável `JWT_SECRET` no arquivo `.env`.
+
+O Docker Compose carregará automaticamente essa variável ao iniciar os serviços.
+
+> Se o projeto for executado exclusivamente com Docker Compose, não é necessário realizar a configuração descrita na seção abaixo.
+
+### Executando o backend fora do Docker
+
+Caso queira executar o backend diretamente pelo IntelliJ IDEA, será necessário configurar JWT_SECRET como variável de ambiente da aplicação.
+
+O arquivo .env não é carregado automaticamente pelo IntelliJ IDEA.
+
+Nesse caso:
+
+1. Abra **Run → Edit Configurations...**
+2. Selecione a configuração da aplicação Spring Boot.
+3. Em **Environment variables**, adicione:
+
+```text
+JWT_SECRET=your-secret-key
+```
+
+4. Execute a aplicação.
+
+> Essa configuração é necessária apenas quando o backend for executado fora do Docker. Ao utilizar Docker Compose, essa etapa pode ser ignorada.
 
 ## Como executar
 
@@ -39,12 +83,46 @@ Isso constrói as imagens e sobe o banco de dados, o backend e o frontend em seg
 
 O backend já inicia com dois usuários para testes:
 
-| Perfil        | E-mail               | Senha      |
-| ------------- | -------------------- | ---------- |
-| Administrador | `admin@learning.com` | `admin123` |
-| Aluno         | `user@learning.com`  | `user123`  |
+| Perfil        | E-mail                   | Senha          |
+| ------------- | ------------------------ | -------------- |
+| Administrador | `admin@learning.com`     | `admin123`     |
+| Aluno         | `estudante@learning.com` | `estudante123` |
 
-> Credenciais apenas para desenvolvimento. Altere-as antes de qualquer uso em produção.
+> Credenciais apenas para testes em desenvolvimento.
+
+## Roteiro de teste
+
+Após iniciar a aplicação, acesse o frontend em `http://localhost:4200`.
+
+### Fluxo de administrador
+
+1. Acesse Entrar.
+2. Utilize:
+   - E-mail: `admin@learning.com`
+   - Senha: `admin123`
+3. Acesse Administração → Cursos.
+4. Crie um novo curso.
+5. Edite o curso criado.
+6. Exclua o curso.
+
+### Fluxo de estudante
+
+1. Acesse `Criar conta` ou utilize:
+   - E-mail: `estudante@learning.com`
+   - Senha: `estudante123`
+2. Acesse Cursos disponíveis.
+3. Matricule-se em um curso.
+4. Acesse Meu aprendizado.
+5. Abra o curso matriculado.
+6. Cadastre uma tarefa informando categoria, data, descrição e tempo gasto.
+7. Edite a tarefa cadastrada.
+8. Verifique o histórico de tarefas.
+
+## Teste de autorização
+
+O usuário **estudante** não possui acesso à área de administração.
+
+O usuário **administrador** pode gerenciar cursos, mas não utiliza o fluxo de estudante.
 
 ## Comandos úteis
 
@@ -65,8 +143,24 @@ docker compose down -v      # idem, e apaga também os dados do banco
 
 ## Status do projeto
 
-- **Backend:** em execução, com a documentação da API disponível no Swagger.
-- **Frontend:** telas estáticas com dados fictícios (hardcoded). Ainda **sem integração com o backend**, sem lógica aplicada e com todas as rotas liberadas, sem autenticação.
+- **Backend:** implementado com autenticação JWT, autorização por perfil, gerenciamento de usuários, cursos, matrículas e registros de tarefas. Documentação da API disponível no Swagger.
+- **Frontend:** integrado ao backend, com autenticação, controle de acesso por perfil, catálogo de cursos, matrícula, gerenciamento administrativo de cursos e registro/edição de tarefas.
+- **Infraestrutura**: aplicação completa executável com Docker Compose.
+
+## Próximos passos
+
+Para uma evolução do projeto além do escopo atual:
+
+- Ampliar a cobertura de testes automatizados.
+- Componentizar e reutilizar elementos comuns do frontend.
+- Extrair funções e regras reutilizáveis para `utils` e serviços.
+- Melhorar a organização e separação de responsabilidades no frontend.
+- Implementar CI/CD para build, testes e deploy.
+- Centralizar configurações de ambiente e secrets.
+- Melhorar observabilidade com logs, métricas e health checks.
+- Evoluir o controle de acesso e as políticas de segurança.
+- Adicionar paginação e filtros ao catálogo de cursos.
+- Evoluir a infraestrutura para um ambiente de cloud.
 
 ### Versão atual
 
