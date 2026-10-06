@@ -25,6 +25,10 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(cors -> {
+                })
+                .csrf(AbstractHttpConfigurer::disable)
+
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .sessionManagement(session ->
@@ -39,7 +43,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/api/auth/login"
+                                "/api/auth/login",
+                                "/api/users",
+                                "/api/enrollments/**"
                         ).permitAll()
 
                         // Consulta de cursos é pública

@@ -1,6 +1,6 @@
 package br.com.dsrivan.learningplatform.security;
 
-import br.com.dsrivan.learningplatform.auth.User;
+import br.com.dsrivan.learningplatform.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -26,6 +26,9 @@ public class JwtService {
         );
 
         this.expiration = expiration;
+
+        System.out.println("JWT_SECRET exists: " +
+                (secret != null && !secret.isBlank()));
     }
 
     public String generateToken(User user) {
