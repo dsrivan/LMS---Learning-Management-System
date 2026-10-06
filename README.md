@@ -147,6 +147,15 @@ docker compose down -v      # idem, e apaga também os dados do banco
 - **Frontend:** integrado ao backend, com autenticação, controle de acesso por perfil, catálogo de cursos, matrícula, gerenciamento administrativo de cursos e registro/edição de tarefas.
 - **Infraestrutura**: aplicação completa executável com Docker Compose.
 
+## Registros de Decisões de Arquitetura (ADR)
+
+As principais decisões arquiteturais do projeto estão documentadas em [Architecture Decision Records](./docs/adr/):
+
+* [ADR 001 — Primary Key Strategy](./docs/adr/001-primary-key-strategy.md)
+* [ADR 002 — JWT Authentication and Authorization](./docs/adr/002-jwt-authentication-and-authorization.md)
+* [ADR 003 — Docker Compose Environment](./docs/adr/003-docker-compose-environment.md)
+
+
 ## Próximos passos
 
 Para uma evolução do projeto além do escopo atual:
