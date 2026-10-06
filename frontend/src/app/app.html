@@ -1,31 +1,35 @@
 @if (showHeader()) {
   <header
-    class="sticky top-0 z-10 flex h-[60px] items-center gap-3 border-b border-line bg-surface px-4 sm:gap-6 sm:px-6"
+    class="sticky top-0 z-10 flex h-15 items-center gap-3 border-b border-line bg-surface px-4 sm:gap-6 sm:px-6"
   >
-    <a class="flex items-center gap-2 font-bold tracking-tight !text-ink" routerLink="/dashboard"
-      ><i class="size-[22px] rounded-md bg-accent"></i>Trilha</a
+    <a class="flex items-center gap-2 font-bold tracking-tight text-ink!" routerLink="/dashboard"
+      ><i class="size-5.5 rounded-md bg-accent"></i>Trilha</a
     >
     <nav class="flex flex-1 gap-1">
+      @if (isStudent()) {
+        <a
+          class="rounded-lg px-2 py-2 text-sm font-medium text-muted! hover:bg-bg hover:text-ink! sm:px-3"
+          routerLinkActive="!bg-bg !text-ink"
+          routerLink="/dashboard"
+          >Meu aprendizado</a
+        >
+      }
       <a
-        class="rounded-lg px-2 py-2 text-sm font-medium !text-muted hover:bg-bg hover:!text-ink sm:px-3"
-        routerLinkActive="!bg-bg !text-ink"
-        routerLink="/dashboard"
-        >Meu aprendizado</a
-      >
-      <a
-        class="rounded-lg px-2 py-2 text-sm font-medium !text-muted hover:bg-bg hover:!text-ink sm:px-3"
+        class="rounded-lg px-2 py-2 text-sm font-medium text-muted! hover:bg-bg hover:text-ink! sm:px-3"
         routerLinkActive="!bg-bg !text-ink"
         routerLink="/cursos"
         >Cursos</a
       >
-      <a
-        class="rounded-lg px-2 py-2 text-sm font-medium !text-muted hover:bg-bg hover:!text-ink sm:px-3"
-        routerLinkActive="!bg-bg !text-ink"
-        routerLink="/admin/cursos"
-        >Administração</a
-      >
+      @if (isAdmin()) {
+        <a
+          class="rounded-lg px-2 py-2 text-sm font-medium text-muted! hover:bg-bg hover:text-ink! sm:px-3"
+          routerLinkActive="!bg-bg !text-ink"
+          routerLink="/admin/cursos"
+          >Administração</a
+        >
+      }
     </nav>
-    <a class="btn btn-link btn-sm" routerLink="/login">Sair</a>
+    <a class="btn btn-link btn-sm" routerLink="/login" (click)="logout()">Sair</a>
     <div
       class="grid size-8 place-items-center rounded-full bg-accent-soft text-xs font-semibold text-accent"
       aria-hidden="true"
@@ -35,6 +39,6 @@
   </header>
 }
 
-<main [class]="showHeader() ? 'mx-auto max-w-[1040px] px-6 pb-16 pt-8' : ''">
+<main [class]="showHeader() ? 'mx-auto max-w-260 px-6 pb-16 pt-8' : ''">
   <router-outlet />
 </main>
