@@ -2,8 +2,9 @@ package br.com.dsrivan.learningplatform.enrollment;
 
 import br.com.dsrivan.learningplatform.course.Course;
 import br.com.dsrivan.learningplatform.course.CourseRepository;
-import br.com.dsrivan.learningplatform.student.Student;
-import br.com.dsrivan.learningplatform.student.StudentRepository;
+import br.com.dsrivan.learningplatform.user.User;
+import br.com.dsrivan.learningplatform.user.UserRepository;
+import br.com.dsrivan.learningplatform.user.UserRole;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,16 +22,16 @@ public class EnrollmentService {
     private static final int COMPLETION_MONTHS = 6;
 
     private final EnrollmentRepository enrollmentRepository;
-    private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
     private final CourseRepository courseRepository;
 
     public EnrollmentService(
             EnrollmentRepository enrollmentRepository,
-            StudentRepository studentRepository,
+            UserRepository userRepository,
             CourseRepository courseRepository) {
 
         this.enrollmentRepository = enrollmentRepository;
-        this.studentRepository = studentRepository;
+        this.userRepository = userRepository;
         this.courseRepository = courseRepository;
     }
 
@@ -51,7 +52,7 @@ public class EnrollmentService {
     public List<EnrollmentResponse> findByStudent(Long studentId) {
         getStudent(studentId);
 
-        return enrollmentRepository.findByStudentId(studentId)
+        return enrollmentRepository.findByStudentIdWithCourse(studentId)
                 .stream()
                 .map(EnrollmentResponse::from)
                 .toList();
@@ -60,7 +61,7 @@ public class EnrollmentService {
     @Transactional
     public EnrollmentResponse create(EnrollmentRequest request) {
 
-        Student student = getStudent(request.studentId());
+        User student = getStudent(request.studentId());
         Course course = getCourse(request.courseId());
 
         if (enrollmentRepository.existsByStudentIdAndCourseId(
@@ -137,12 +138,21 @@ public class EnrollmentService {
                 ));
     }
 
-    private Student getStudent(Long id) {
-        return studentRepository.findById(id)
+    private User getStudent(Long id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Student not found: " + id
                 ));
+
+        if (user.getRole() != UserRole.STUDENT) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "User is not a student: " + id
+            );
+        }
+
+        return user;
     }
 
     private Course getCourse(Long id) {

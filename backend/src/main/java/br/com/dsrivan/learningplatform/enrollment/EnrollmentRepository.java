@@ -1,6 +1,7 @@
 package br.com.dsrivan.learningplatform.enrollment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -17,5 +18,11 @@ public interface EnrollmentRepository
             EnrollmentStatus status
     );
 
-    List<Enrollment> findByStudentId(Long studentId);
+    @Query("""
+            SELECT e
+            FROM Enrollment e
+            JOIN FETCH e.course
+            WHERE e.student.id = :studentId
+            """)
+    List<Enrollment> findByStudentIdWithCourse(Long studentId);
 }

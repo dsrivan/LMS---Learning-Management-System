@@ -1,7 +1,7 @@
 package br.com.dsrivan.learningplatform.enrollment;
 
 import br.com.dsrivan.learningplatform.course.Course;
-import br.com.dsrivan.learningplatform.student.Student;
+import br.com.dsrivan.learningplatform.user.User;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -25,7 +25,7 @@ public class Enrollment {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "student_id", nullable = false)
-    private Student student;
+    private User student;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "course_id", nullable = false)
@@ -48,7 +48,7 @@ public class Enrollment {
     }
 
     public Enrollment(
-            Student student,
+            User student,
             Course course,
             Instant enrolledAt,
             LocalDate completionDeadline) {
@@ -64,7 +64,7 @@ public class Enrollment {
         return id;
     }
 
-    public Student getStudent() {
+    public User getStudent() {
         return student;
     }
 

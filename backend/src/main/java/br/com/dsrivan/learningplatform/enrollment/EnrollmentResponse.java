@@ -1,12 +1,14 @@
 package br.com.dsrivan.learningplatform.enrollment;
 
+import br.com.dsrivan.learningplatform.course.CourseResponse;
+
 import java.time.Instant;
 import java.time.LocalDate;
 
 public record EnrollmentResponse(
         Long id,
         Long studentId,
-        Long courseId,
+        CourseResponse course,
         Instant enrolledAt,
         LocalDate completionDeadline,
         Instant completedAt,
@@ -17,7 +19,7 @@ public record EnrollmentResponse(
         return new EnrollmentResponse(
                 enrollment.getId(),
                 enrollment.getStudent().getId(),
-                enrollment.getCourse().getId(),
+                CourseResponse.from(enrollment.getCourse()),
                 enrollment.getEnrolledAt(),
                 enrollment.getCompletionDeadline(),
                 enrollment.getCompletedAt(),
