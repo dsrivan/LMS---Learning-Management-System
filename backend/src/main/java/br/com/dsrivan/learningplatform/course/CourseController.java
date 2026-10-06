@@ -1,6 +1,5 @@
 package br.com.dsrivan.learningplatform.course;
 
-import br.com.dsrivan.learningplatform.course.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
