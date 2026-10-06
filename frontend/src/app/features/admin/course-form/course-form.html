@@ -1,21 +1,63 @@
-<div class="mx-auto max-w-[560px]">
-  <a class="mb-4 inline-block text-sm" routerLink="/admin/cursos">‹ Gerenciar cursos</a>
-  <div class="card">
-    <h1>Novo curso</h1>
-    <form class="mt-5 grid gap-4" (submit)="$event.preventDefault()">
-      <label class="grid gap-1.5 text-sm font-medium"
-        ><span>Nome do curso</span><input placeholder="Ex.: Kubernetes Essencial" /><span
-          class="text-xs font-normal text-muted"
-          >O nome deve ser único.</span
-        ></label
+<div class="card">
+  <h1>{{ action() }}</h1>
+  <form #form="ngForm" class="mt-5 grid gap-4" (ngSubmit)="onSubmit(form)">
+    <label class="grid gap-1.5 text-sm font-medium">
+      <span>Nome do curso</span>
+      <input
+        name="name"
+        [(ngModel)]="formData.name"
+        required
+        minlength="10"
+        maxlength="100"
+        placeholder="Ex.: Kubernetes Essencial"
+      />
+      <span class="text-xs font-normal text-muted"
+        >O nome deve ser único. Mínimo de 10 caracteres e máximo de 100.</span
       >
-      <label class="grid gap-1.5 text-sm font-medium"
-        ><span>Descrição</span><textarea placeholder="O que o estudante vai aprender?"></textarea>
-      </label>
-      <div class="flex justify-end gap-2.5">
-        <a class="btn btn-ghost" routerLink="/admin/cursos">Cancelar</a
-        ><a class="btn" routerLink="/admin/cursos">Salvar</a>
-      </div>
-    </form>
-  </div>
+
+      @if (form.controls['name']?.touched && form.controls['name']?.invalid) {
+        @if (form.controls['name']?.errors?.['required']) {
+          <span class="text-xs text-danger"> Informe o nome do curso. </span>
+        } @else if (form.controls['name']?.errors?.['minlength']) {
+          <span class="text-xs text-danger"> O nome deve ter pelo menos 10 caracteres. </span>
+        } @else if (form.controls['name']?.errors?.['maxlength']) {
+          <span class="text-xs text-danger"> O nome deve ter no máximo 100 caracteres. </span>
+        }
+      }
+    </label>
+    <label class="grid gap-1.5 text-sm font-medium">
+      <span>Descrição</span>
+      <textarea
+        name="description"
+        [(ngModel)]="formData.description"
+        required
+        minlength="10"
+        maxlength="500"
+        rows="4"
+        placeholder="O que o estudante vai aprender?"
+      ></textarea>
+      @if (form.controls['description']?.touched && form.controls['description']?.invalid) {
+        @if (form.controls['description']?.errors?.['required']) {
+          <span class="text-xs text-danger"> Informe a descrição do curso. </span>
+        } @else if (form.controls['description']?.errors?.['minlength']) {
+          <span class="text-xs text-danger"> A descrição deve ter pelo menos 10 caracteres. </span>
+        } @else if (form.controls['description']?.errors?.['maxlength']) {
+          <span class="text-xs text-danger"> A descrição deve ter no máximo 500 caracteres. </span>
+        }
+      }
+    </label>
+    <div class="flex justify-end gap-2.5">
+      <button
+        type="button"
+        class="btn btn-ghost"
+        [disabled]="form.invalid || loading()"
+        [routerLink]="loading() ? null : ['/admin/cursos']"
+      >
+        Cancelar
+      </button>
+      <button type="submit" class="btn" [disabled]="form.invalid || loading()">
+        {{ loading() ? 'Salvando...' : 'Salvar' }}
+      </button>
+    </div>
+  </form>
 </div>

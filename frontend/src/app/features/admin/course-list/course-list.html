@@ -7,37 +7,61 @@
     <a class="btn" routerLink="/admin/cursos/novo">Novo curso</a>
   </div>
 </div>
-<label class="grid gap-1.5 text-sm font-medium mb-5 max-w-[360px]"
-  ><span>Buscar curso</span><input type="search" placeholder="Ex.: Kubernetes"
+<label class="grid gap-1.5 text-sm font-medium mb-5 max-w-90"
+  ><span>Buscar curso</span
+  ><input type="search" placeholder="Ex.: Kubernetes" (input)="setSearchTerm($event)"
 /></label>
-<div class="overflow-x-auto rounded-xl border border-line bg-surface">
-  <table>
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Descrição</th>
-        <th class="text-right">Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (course of courseList; track course.id) {
+@if (loading()) {
+  <div
+    class="flex flex-col items-center justify-center gap-3 py-16 text-muted"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="size-9 animate-spin rounded-full border-[3px] border-line border-t-accent"></div>
+    <span class="text-sm">Carregando cursos...</span>
+  </div>
+} @else if (hasError()) {
+  <div class="mt-1.5 w-full">
+    <p class="mt-1 text-muted">
+      Ocorreu um erro ao carregar os cursos. Tente novamente mais tarde.
+    </p>
+  </div>
+} @else {
+  <div class="overflow-x-auto rounded-xl border border-line bg-surface">
+    <table>
+      <thead>
         <tr>
-          <td>
-            <strong>{{ course.title }}</strong>
-          </td>
-          <td>{{ course.description }}</td>
-          <td class="whitespace-nowrap text-right">
-            <a class="btn btn-ghost btn-sm" [routerLink]="['/admin/cursos', course.id, 'editar']"
-              >Editar</a
-            >
-            <button type="button" class="btn btn-ghost btn-sm btn-danger">Remover</button>
-          </td>
+          <th>Nome</th>
+          <th>Descrição</th>
+          <th class="text-right">Ações</th>
         </tr>
-      } @empty {
-        <tr>
-          <td colspan="3" class="text-center text-muted">Nenhum curso encontrado.</td>
-        </tr>
-      }
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        @for (course of filteredCourseList(); track course.id) {
+          <tr>
+            <td>
+              <strong>{{ course.name }}</strong>
+            </td>
+            <td>{{ course.description }}</td>
+            <td class="whitespace-nowrap text-right">
+              <a class="btn btn-ghost btn-sm" [routerLink]="['/admin/cursos', course.id, 'editar']"
+                >Editar</a
+              >
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm btn-danger"
+                (click)="deleteCourse(course.id)"
+              >
+                {{ deleteLoading() ? 'Removendo...' : 'Remover' }}
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="3" class="text-center text-muted">Nenhum curso encontrado.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

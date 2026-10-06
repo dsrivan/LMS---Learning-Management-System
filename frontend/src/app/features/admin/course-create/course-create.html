@@ -1,0 +1,7 @@
+<div class="mx-auto max-w-140">
+  <a class="mb-4 inline-block text-sm" [routerLink]="['/admin/cursos']">Gerenciar cursos</a>
+</div>
+
+<div class="mx-auto max-w-140">
+  <app-course-form action="Cadastrar curso" (submitted)="createCourse($event)"></app-course-form>
+</div>
