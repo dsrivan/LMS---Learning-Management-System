@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,9 +26,7 @@ public class SecurityConfig {
         http
                 .cors(cors -> {
                 })
-                .csrf(AbstractHttpConfigurer::disable)
-
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.disable())
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
@@ -44,8 +41,7 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/api/auth/login",
-                                "/api/users",
-                                "/api/enrollments/**"
+                                "/api/users"
                         ).permitAll()
 
                         // Consulta de cursos é pública
