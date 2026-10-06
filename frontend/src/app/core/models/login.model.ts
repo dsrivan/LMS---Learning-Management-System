@@ -1,0 +1,11 @@
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  userId: number;
+  token: string;
+  email: string;
+  role: 'ADMIN' | 'STUDENT';
+}
