@@ -1,0 +1,9 @@
+<div class="mx-auto max-w-140">
+  <a class="mb-4 inline-block text-sm" [routerLink]="['/cursos/meu-curso/', idEnrollment]"
+    >Voltar</a
+  >
+</div>
+
+<div class="mx-auto max-w-140">
+  <app-task-form action="Cadastrar tarefa" (submitted)="createTask($event)"></app-task-form>
+</div>

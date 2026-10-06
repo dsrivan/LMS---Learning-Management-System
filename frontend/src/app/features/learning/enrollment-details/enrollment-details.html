@@ -1,0 +1,101 @@
+<a class="mb-4 inline-block text-sm" routerLink="/dashboard">‹ Meu aprendizado</a>
+@if (loading()) {
+  <div
+    class="flex flex-col items-center justify-center gap-3 py-16 text-muted"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="size-9 animate-spin rounded-full border-[3px] border-line border-t-accent"></div>
+    <span class="text-sm">Carregando dados do curso...</span>
+  </div>
+} @else {
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h1>{{ enrollment()?.course.name }}</h1>
+      <p class="mt-1 text-muted">{{ enrollment()?.course.description }}</p>
+    </div>
+    <div class="flex flex-wrap gap-2.5">
+      @if (enrollment()?.completedAt === null) {
+        <button
+          type="button"
+          class="btn btn-ghost btn-danger"
+          (click)="completeEnrollment(enrollment()?.id || null)"
+        >
+          Concluir curso
+        </button>
+      }
+    </div>
+  </div>
+  <div
+    class="my-5 grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-px overflow-hidden rounded-xl border border-line bg-line [&>div]:bg-surface [&>div]:px-[18px] [&>div]:py-4 [&_span]:block [&_span]:text-xs [&_span]:text-muted"
+  >
+    <div>
+      <span>Data da matrícula</span>
+      <strong>{{ enrollment()?.enrolledAt | date: 'dd/MM/yyyy' }}</strong>
+    </div>
+    <div>
+      <span>Prazo para conclusão</span>
+      <strong>{{ enrollment()?.completionDeadline | date: 'dd/MM/yyyy' }}</strong>
+    </div>
+  </div>
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+    <div><h1>Minhas tarefas</h1></div>
+    <div class="flex flex-wrap gap-2.5">
+      @if (enrollment()?.completedAt === null) {
+        <a class="btn" routerLink="/cursos/meu-curso/{{ enrollment()?.id }}/tarefas/nova"
+          >Adicionar tarefa</a
+        >
+      }
+    </div>
+  </div>
+  <div class="overflow-x-auto rounded-xl border border-line bg-surface">
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Categoria</th>
+          <th>Descrição</th>
+          <th>Tempo gasto</th>
+          @if (enrollment()?.completedAt === null) {
+            <th class="text-right">Ações</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (task of taskList(); track task.id) {
+          <tr>
+            <td>{{ task.date }}</td>
+            <td>
+              <span
+                class="inline-block w-fit rounded-full px-2.5 py-0.5 text-[.72rem] font-semibold bg-accent-soft text-accent"
+                >{{ task.category }}</span
+              >
+            </td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.timeSpent }}</td>
+            @if (enrollment()?.completedAt === null) {
+              <td class="whitespace-nowrap text-right">
+                <a
+                  class="btn btn-ghost btn-sm"
+                  routerLink="/cursos/meu-curso/{{ enrollment()?.id }}/tarefas/{{ task.id }}/editar"
+                  >Editar</a
+                >
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-sm btn-danger"
+                  (click)="deleteTask(task.id)"
+                >
+                  {{ deleteLoading() ? 'Removendo...' : 'Remover' }}
+                </button>
+              </td>
+            }
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="text-center text-muted">Nenhuma tarefa registrada.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

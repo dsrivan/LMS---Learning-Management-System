@@ -1,39 +1,112 @@
-<div class="mx-auto max-w-[560px]">
-  <a class="mb-4 inline-block text-sm" routerLink="/cursos/1">‹ Voltar ao curso</a>
+<div class="mx-auto max-w-140">
   <div class="card">
-    <h1>Registrar tarefa</h1>
+    <h1>{{ action() }}</h1>
     <p class="mt-1 text-muted">Você pode registrar várias tarefas no mesmo dia.</p>
-    <form class="mt-5 grid gap-4" (submit)="$event.preventDefault()">
+
+    <form #form="ngForm" class="mt-5 grid gap-4" (ngSubmit)="onSubmit(form)">
       <div class="grid gap-4 sm:grid-cols-2">
-        <label class="grid gap-1.5 text-sm font-medium"
-          ><span>Data</span><input type="date" value="2026-10-02" /></label
-        ><label class="grid gap-1.5 text-sm font-medium"
-          ><span>Categoria</span
-          ><select>
-            <option value="" disabled selected>Selecione</option>
-            @for (category of categoryList; track category) {
-              <option>{{ category }}</option>
+        <label class="grid gap-1.5 text-sm font-medium">
+          <span>Data</span>
+
+          <input name="date" [(ngModel)]="formData.date" type="date" required />
+
+          @if (form.controls['date']?.touched && form.controls['date']?.invalid) {
+            @if (form.controls['date']?.errors?.['required']) {
+              <span class="text-xs text-danger"> Informe a data da tarefa. </span>
             }
-          </select></label
-        >
+          }
+        </label>
       </div>
-      <label class="grid gap-1.5 text-sm font-medium"
-        ><span>Descrição da tarefa</span><textarea placeholder="O que você fez?"></textarea>
+
+      <fieldset class="grid gap-1.5">
+        <legend class="mb-1.5 text-sm font-medium">Categoria</legend>
+
+        <div class="grid grid-cols-3 gap-3">
+          @for (category of categories; track category.value) {
+            <label class="cursor-pointer">
+              <input
+                name="category"
+                [(ngModel)]="formData.category"
+                required
+                type="radio"
+                [value]="category.value"
+                class="peer sr-only"
+              />
+
+              <span
+                class="flex flex-col items-center gap-2 rounded-xl border border-line bg-surface px-3 py-4 text-sm font-medium text-muted transition hover:bg-bg peer-checked:border-accent peer-checked:bg-accent-soft peer-checked:text-accent peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
+              >
+                <svg
+                  class="size-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path [attr.d]="category.icon" />
+                </svg>
+
+                {{ category.label }}
+              </span>
+            </label>
+          }
+        </div>
+      </fieldset>
+
+      <label class="grid gap-1.5 text-sm font-medium">
+        <span>Descrição da tarefa</span>
+
+        <textarea
+          name="description"
+          [(ngModel)]="formData.description"
+          placeholder="O que você fez?"
+          required
+          minlength="10"
+          maxlength="500"
+        ></textarea>
+
+        @if (form.controls['description']?.touched && form.controls['description']?.invalid) {
+          @if (form.controls['description']?.errors?.['required']) {
+            <span class="text-xs text-danger"> Informe a descrição da tarefa. </span>
+          } @else if (form.controls['description']?.errors?.['minlength']) {
+            <span class="text-xs text-danger">
+              A descrição deve ter pelo menos 10 caracteres.
+            </span>
+          } @else if (form.controls['description']?.errors?.['maxlength']) {
+            <span class="text-xs text-danger">
+              A descrição deve ter no máximo 500 caracteres.
+            </span>
+          }
+        }
       </label>
-      <label class="grid gap-1.5 text-sm font-medium"
-        ><span>Tempo gasto</span
-        ><select>
-          <option value="" disabled selected>Selecione</option>
+
+      <label class="grid gap-1.5 text-sm font-medium">
+        <span>Tempo gasto</span>
+
+        <select name="spentTime" [(ngModel)]="formData.spentTime" required>
+          <option value="" disabled>Selecione</option>
+
           @for (time of spentTimeList; track time) {
-            <option>{{ time }}</option>
-          }</select
-        ><span class="text-xs font-normal text-muted"
-          >Registrado em blocos de 30 minutos.</span
-        ></label
-      >
+            <option [value]="time">{{ time }}</option>
+          }
+        </select>
+
+        <span class="text-xs font-normal text-muted"> Registrado em blocos de 30 minutos. </span>
+
+        @if (form.controls['spentTime']?.touched && form.controls['spentTime']?.invalid) {
+          @if (form.controls['spentTime']?.errors?.['required']) {
+            <span class="text-xs text-danger"> Informe o tempo gasto. </span>
+          }
+        }
+      </label>
+
       <div class="flex justify-end gap-2.5">
-        <a class="btn btn-ghost" routerLink="/cursos/1">Cancelar</a
-        ><a class="btn" routerLink="/cursos/1">Salvar</a>
+        <button type="submit" class="btn" [disabled]="form.invalid || loading()">
+          {{ loading() ? 'Salvando...' : 'Salvar' }}
+        </button>
       </div>
     </form>
   </div>

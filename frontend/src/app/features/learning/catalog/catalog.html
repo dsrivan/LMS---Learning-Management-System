@@ -5,32 +5,56 @@
   </div>
   <div class="flex flex-wrap gap-2.5"></div>
 </div>
-<label class="grid gap-1.5 text-sm font-medium mb-5 max-w-[360px]"
-  ><span>Buscar curso</span><input type="search" placeholder="Ex.: Docker"
+<label class="grid gap-1.5 text-sm font-medium mb-5 max-w-90"
+  ><span>Buscar curso</span
+  ><input type="search" placeholder="Ex.: Docker" (input)="setSearchTerm($event)"
 /></label>
-<div class="grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-4">
-  @for (course of courseList; track course.id) {
-    <article
-      class="flex flex-col gap-3 rounded-xl border border-line bg-surface p-5 [&_h2_a]:text-ink [&>p]:flex-1 [&>p]:text-sm [&>p]:text-muted"
-    >
-      <span
-        class="inline-block w-fit rounded-full px-2.5 py-0.5 text-[.72rem] font-semibold bg-ok-soft text-ok"
-        >Disponível</span
+@if (loading()) {
+  <div
+    class="flex flex-col items-center justify-center gap-3 py-16 text-muted"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="size-9 animate-spin rounded-full border-[3px] border-line border-t-accent"></div>
+    <span class="text-sm">Carregando cursos...</span>
+  </div>
+} @else if (courseList().length === 0) {
+  <div class="mt-1.5 w-full">
+    <p class="mt-1 text-muted">
+      {{
+        hasError()
+          ? 'Ocorreu um erro ao carregar os cursos. Tente novamente mais tarde.'
+          : 'Nenhum curso encontrado.'
+      }}
+    </p>
+  </div>
+} @else {
+  <div class="grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-4">
+    @for (course of filteredCourseList(); track course.id) {
+      <article
+        class="flex flex-col gap-3 rounded-xl border border-line bg-surface p-5 [&_h2_a]:text-ink [&>p]:flex-1 [&>p]:text-sm [&>p]:text-muted"
       >
-      <!-- <span
-      class="inline-block w-fit rounded-full px-2.5 py-0.5 text-[.72rem] font-semibold bg-accent-soft text-accent"
-      >Matriculado</span
-    > -->
-      <h2>{{ course.title }}</h2>
-      <p>{{ course.description }}</p>
-      <div class="flex flex-wrap gap-2.5">
-        <a class="btn btn-ghost btn-sm" routerLink="/cursos/{{ course.id }}">Ver detalhes</a
-        ><button type="button" class="btn btn-sm">Matricular-se</button>
-      </div>
-    </article>
-  } @empty {
-    <div class="mt-1.5">
-      <p class="mt-1 text-muted">Nenhum curso encontrado.</p>
-    </div>
-  }
-</div>
+        <span
+          class="inline-block w-fit rounded-full px-2.5 py-0.5 text-[.72rem] font-semibold"
+          [class]="getCourseStatusClass(course.id)"
+        >
+          {{ getCourseStatusLabel(course.id) }}
+        </span>
+        <h2>{{ course.name }}</h2>
+        <p>{{ course.description }}</p>
+        <div class="flex flex-wrap flex-row-reverse gap-2.5">
+          @if (isStudent() && getEnrollmentStatus(course.id) === null) {
+            <button
+              type="button"
+              class="btn btn-sm"
+              (click)="enrollCourse(course.id)"
+              [disabled]="enrolling() || activeEnrollmentCount() >= 3"
+            >
+              {{ activeEnrollmentCount() >= 3 ? 'Limite atingido' : 'Matricular' }}
+            </button>
+          }
+        </div>
+      </article>
+    }
+  </div>
+}

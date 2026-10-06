@@ -1,0 +1,22 @@
+<div class="mx-auto max-w-140">
+  <a class="mb-4 inline-block text-sm" [routerLink]="['/cursos/meu-curso', idEnrollment]">Voltar</a>
+</div>
+
+@if (loading()) {
+  <div
+    class="flex flex-col items-center justify-center gap-3 py-16 text-muted"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="size-9 animate-spin rounded-full border-[3px] border-line border-t-accent"></div>
+    <span class="text-sm">Carregando dados da tarefa...</span>
+  </div>
+} @else {
+  <div class="mx-auto max-w-140">
+    <app-task-form
+      action="Editar tarefa"
+      [task]="taskForEdit()"
+      (submitted)="updateTask($event)"
+    ></app-task-form>
+  </div>
+}
